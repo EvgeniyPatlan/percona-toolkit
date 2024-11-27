@@ -46,7 +46,7 @@ my $pid1 = fork();
 
 if ( !$pid1 ) {
    setpgrp;
-   system('ncat -k -l localhost 3333 --sh-exec "ncat 127.0.0.1 12345"');
+   system('ncat -k -l localhost 33333 --sh-exec "ncat 127.0.0.1 12345"');
    exit;
 }
 
@@ -54,7 +54,7 @@ my $pid2 = fork();
 
 if ( !$pid2 ) {
    setpgrp;
-   system('ncat -k -l localhost 3334 --sh-exec "ncat 127.0.0.1 12346"');
+   system('ncat -k -l localhost 33334 --sh-exec "ncat 127.0.0.1 12346"');
    exit;
 }
 
@@ -68,10 +68,10 @@ my $ms = new MasterSlave(
 my $ss = $ms->get_replica_status($replica1_dbh);
 
 $replica1_dbh->do("STOP ${replica_name}");
-$replica1_dbh->do("CHANGE ${source_change} TO ${source_name}_PORT=3333, ${source_name}_LOG_POS=" . $ss->{"exec_${source_name}_log_pos"});
+$replica1_dbh->do("CHANGE ${source_change} TO ${source_name}_PORT=33333, ${source_name}_LOG_POS=" . $ss->{"exec_${source_name}_log_pos"});
 $replica1_dbh->do("START ${replica_name}");
 
-my $output = `$trunk/bin/pt-table-sync h=127.0.0.1,P=3334,u=msandbox,p=msandbox --database=test --table=t1 --sync-to-source --execute --verbose 2>&1`;
+my $output = `$trunk/bin/pt-table-sync h=127.0.0.1,P=33334,u=msandbox,p=msandbox --database=test --table=t1 --sync-to-source --execute --verbose 2>&1`;
 
 unlike(
    $output,
