@@ -33,14 +33,13 @@ elsif ( !$replica1_dbh ) {
 }
 elsif (!$have_ncat) {
    plan skip_all => 'ncat, required for this test, is not installed or not in PATH';
-print("-${have_ncat}-\n");
 }
 else {
    plan tests => 3;
 }
-print("--${have_ncat}--\n");
-exit;
 
+   system('ncat -k -l localhost 33333 --sh-exec "ncat 127.0.0.1 12345"');
+   exit;
 $sb->load_file('source', "t/pt-table-sync/samples/pt-1205.sql");
 $sb->wait_for_replicas();
 
