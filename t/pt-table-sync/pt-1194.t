@@ -38,11 +38,11 @@ else {
    plan tests => 3;
 }
 
-$sb->load_file('source', "t/pt-table-sync/samples/pt-1205.sql");
-$sb->wait_for_replicas();
-
 print("OK\n");
 exit;
+
+$sb->load_file('source', "t/pt-table-sync/samples/pt-1205.sql");
+$sb->wait_for_replicas();
 
 # Setting up tunnels
 my $pid1 = fork();
