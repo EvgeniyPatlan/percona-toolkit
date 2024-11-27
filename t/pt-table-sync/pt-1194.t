@@ -82,24 +82,30 @@ $replica1_dbh->do("STOP ${replica_name}");
 $replica1_dbh->do("CHANGE ${source_change} TO ${source_name}_PORT=33333, ${source_name}_LOG_POS=" . $ss->{"exec_${source_name}_log_pos"});
 $replica1_dbh->do("START ${replica_name}");
 
+diag("OK 9\n");
 my $output = `$trunk/bin/pt-table-sync h=127.0.0.1,P=33334,u=msandbox,p=msandbox --database=test --table=t1 --sync-to-source --execute --verbose 2>&1`;
 
+diag("OK 10\n");
 unlike(
    $output,
    qr/The replica is connected to \d+ but the source's port is/,
    'No error for redirected replica'
 ) or diag($output);
 
+diag("OK 11\n");
 kill -1, getpgrp($pid1);
 kill -1, getpgrp($pid2);
 
+diag("OK 12\n");
 $replica1_dbh->do("STOP ${replica_name}");
 $ss = $ms->get_replica_status($replica1_dbh);
 $replica1_dbh->do("CHANGE ${source_change} TO ${source_name}_PORT=12347, ${source_name}_LOG_POS=" . $ss->{"exec_${source_name}_log_pos"});
 $replica1_dbh->do("START ${replica_name} SQL_THREAD");
 
+diag("OK 13\n");
 $output = `$trunk/bin/pt-table-sync h=127.0.0.1,P=12346,u=msandbox,p=msandbox --database=test --table=t1 --sync-to-source --execute --verbose 2>&1`;
 
+diag("OK 14\n");
 like(
    $output,
    qr/The server specified as a source has no connected replicas/,
@@ -109,9 +115,12 @@ like(
 $replica1_dbh->do("STOP ${replica_name}");
 $replica1_dbh->do("CHANGE ${source_change} TO ${source_name}_PORT=12345, ${source_name}_LOG_POS=" . $ss->{"exec_${source_name}_log_pos"});
 $replica1_dbh->do("START ${replica_name}");
+diag("OK 15\n");
 # #############################################################################
 # Done.
 # #############################################################################
 $sb->wipe_clean($source_dbh);
+diag("OK 16\n");
 ok($sb->ok(), "Sandbox servers") or BAIL_OUT(__FILE__ . " broke the sandbox");
+diag("OK 17\n");
 exit;
