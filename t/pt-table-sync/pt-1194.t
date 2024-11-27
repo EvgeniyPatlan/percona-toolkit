@@ -37,6 +37,7 @@ elsif (!$have_ncat) {
 else {
    plan tests => 3;
 }
+print("--${have_ncat}--\n");
 
 $sb->load_file('source', "t/pt-table-sync/samples/pt-1205.sql");
 $sb->wait_for_replicas();
