@@ -63,9 +63,11 @@ my $pid2 = fork();
 if ( !$pid2 ) {
    setpgrp;
    system('ncat -k -l localhost 33334 --sh-exec "ncat 127.0.0.1 12346"');
+diag("OK 6\n");
    exit;
 }
 
+diag("OK 7\n");
 my $o = new OptionParser();
 my $q = new Quoter();
 my $ms = new MasterSlave(
@@ -75,6 +77,7 @@ my $ms = new MasterSlave(
             );
 my $ss = $ms->get_replica_status($replica1_dbh);
 
+diag("OK 8\n");
 $replica1_dbh->do("STOP ${replica_name}");
 $replica1_dbh->do("CHANGE ${source_change} TO ${source_name}_PORT=33333, ${source_name}_LOG_POS=" . $ss->{"exec_${source_name}_log_pos"});
 $replica1_dbh->do("START ${replica_name}");
