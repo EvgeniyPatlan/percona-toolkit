@@ -39,10 +39,13 @@ else {
 }
 
 print("OK\n");
-exit;
 
 $sb->load_file('source', "t/pt-table-sync/samples/pt-1205.sql");
+print("OK 2\n");
 $sb->wait_for_replicas();
+
+print("OK 3\n");
+exit;
 
 # Setting up tunnels
 my $pid1 = fork();
