@@ -38,13 +38,13 @@ else {
    plan tests => 3;
 }
 
-print("OK\n");
+diag("OK\n");
 
 $sb->load_file('source', "t/pt-table-sync/samples/pt-1205.sql");
-print("OK 2\n");
+diag("OK 2\n");
 $sb->wait_for_replicas();
 
-print("OK 3\n");
+diag("OK 3\n");
 
 # Setting up tunnels
 my $pid1 = fork();
@@ -52,11 +52,11 @@ my $pid1 = fork();
 if ( !$pid1 ) {
    setpgrp;
    system('ncat -k -l localhost 33333 --sh-exec "ncat 127.0.0.1 12345"');
-print("OK 4\n");
+diag("OK 4\n");
    exit;
 }
 
-print("OK 5\n");
+diag("OK 5\n");
 exit;
 
 my $pid2 = fork();
