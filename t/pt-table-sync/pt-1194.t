@@ -41,6 +41,9 @@ else {
 $sb->load_file('source', "t/pt-table-sync/samples/pt-1205.sql");
 $sb->wait_for_replicas();
 
+print("OK\n");
+exit;
+
 # Setting up tunnels
 my $pid1 = fork();
 
@@ -57,9 +60,6 @@ if ( !$pid2 ) {
    system('ncat -k -l localhost 33334 --sh-exec "ncat 127.0.0.1 12346"');
    exit;
 }
-
-print("OK\n");
-exit;
 
 my $o = new OptionParser();
 my $q = new Quoter();
