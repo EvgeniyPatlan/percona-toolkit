@@ -45,7 +45,6 @@ print("OK 2\n");
 $sb->wait_for_replicas();
 
 print("OK 3\n");
-exit;
 
 # Setting up tunnels
 my $pid1 = fork();
@@ -55,6 +54,9 @@ if ( !$pid1 ) {
    system('ncat -k -l localhost 33333 --sh-exec "ncat 127.0.0.1 12345"');
    exit;
 }
+
+print("OK 4\n");
+exit;
 
 my $pid2 = fork();
 
