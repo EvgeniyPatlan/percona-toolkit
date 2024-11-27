@@ -52,10 +52,11 @@ my $pid1 = fork();
 if ( !$pid1 ) {
    setpgrp;
    system('ncat -k -l localhost 33333 --sh-exec "ncat 127.0.0.1 12345"');
+print("OK 4\n");
    exit;
 }
 
-print("OK 4\n");
+print("OK 5\n");
 exit;
 
 my $pid2 = fork();
