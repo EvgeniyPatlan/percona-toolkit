@@ -57,7 +57,6 @@ diag("OK 4\n");
 }
 
 diag("OK 5\n");
-exit;
 
 my $pid2 = fork();
 
