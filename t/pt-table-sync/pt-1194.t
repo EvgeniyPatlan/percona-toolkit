@@ -10,6 +10,7 @@ use strict;
 use warnings FATAL => 'all';
 use English qw(-no_match_vars);
 use Test::More;
+use POSIX ":sys_wait_h";
 
 use PerconaTest;
 use Sandbox;
@@ -95,6 +96,9 @@ unlike(
 diag("OK 11\n");
 kill -1, getpgrp($pid1);
 kill -1, getpgrp($pid2);
+
+1 while waitpid($pid1, WUNTRACED) > 0;
+1 while waitpid($pid2, WNOHANG) > 0;
 
 diag("OK 12\n");
 $replica1_dbh->do("STOP ${replica_name}");
