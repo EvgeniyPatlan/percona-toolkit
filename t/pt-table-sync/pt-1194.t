@@ -97,7 +97,7 @@ diag("OK 11\n");
 kill -1, getpgrp($pid1);
 kill -1, getpgrp($pid2);
 
-1 while waitpid($pid1, WUNTRACED) > 0;
+1 while waitpid($pid1, WNOHANG) > 0;
 1 while waitpid($pid2, WNOHANG) > 0;
 
 diag("OK 12\n");
