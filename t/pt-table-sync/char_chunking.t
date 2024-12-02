@@ -36,6 +36,7 @@ my @args = ('h=127.1,P=12346,u=msandbox,p=msandbox', qw(--sync-to-source -t test
 $sb->create_dbs($source_dbh, ['test']);
 $sb->load_file('source', "t/lib/samples/char-chunking/ascii.sql", "test");
 $source_dbh->do('alter table test.ascii drop column `i`');
+$sb->wait_for_replicas();
 
 wait_until(
    sub {
@@ -55,7 +56,7 @@ like(
    $output,
    qr/#\s+0\s+4\s+0\s+0\s+Chunk\s+/,
    "Chunks char col"
-);
+) or diag($output);
 like(
    $output,
    qr/FORCE INDEX \(`c`\)/,
