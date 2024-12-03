@@ -38,14 +38,6 @@ $sb->load_file('source', "t/lib/samples/char-chunking/ascii.sql", "test");
 $source_dbh->do('alter table test.ascii drop column `i`');
 $sb->wait_for_replicas();
 
-wait_until(
-   sub {
-      my $row;
-      eval {$row = $replica_dbh->selectall_arrayref("select * from test.ascii");};
-      return 1 if $row && @$row > 100;
-   },
-);
-
 $replica_dbh->do('delete from test.ascii where c like "Zesus%"');
 
 $output = output(
