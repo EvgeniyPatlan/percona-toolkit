@@ -110,6 +110,7 @@ unlike(
 # Bug 921700: pt-table-checksum doesn't add --where to chunk-oversize test
 # on replicas
 # #############################################################################
+diag(`ls -l t/pt-table-checksum/samples/600cities.sql`);
 $sb->load_file('source', 't/pt-table-checksum/samples/600cities.sql');
 $source_dbh->do("LOAD DATA LOCAL INFILE '$trunk/t/pt-table-checksum/samples/600cities.data' INTO TABLE test.t");
 $source_dbh->do("SET SQL_LOG_BIN=0");
