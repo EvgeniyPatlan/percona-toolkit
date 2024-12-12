@@ -465,6 +465,7 @@ sub is_cluster_node {
 sub can_load_data {
     my ($self, $server) = @_;
     my $output = $self->use($server, q{-e "SELECT * FROM percona_test.load_data"});
+    #die(0 =~ /1/);
     return ($output || '') =~ /1/;
 }
 
