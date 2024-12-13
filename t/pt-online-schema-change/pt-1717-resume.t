@@ -398,6 +398,7 @@ $replica_dbh2 = $sb->get_dbh_for('replica2');
 diag("Setting replica delay to 0 seconds");
 $replica_dbh1->do("STOP ${replica_name}");
 $replica_dbh2->do("STOP ${replica_name}");
+$replica_dbh1->do("CHANGE ${source_change} TO ${source_name}_DELAY=0");
 $source_dbh->do("RESET ${source_reset}");
 $replica_dbh1->do("RESET ${source_reset}");
 $replica_dbh1->do("RESET ${replica_name}");

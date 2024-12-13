@@ -104,6 +104,7 @@ unlike(
 # #############################################################################
 # Done.
 # #############################################################################
+$sb->wait_for_replicas();
 $sb->wipe_clean($dbh);
 ok($sb->ok(), "Sandbox servers") or BAIL_OUT(__FILE__ . " broke the sandbox");
 exit;

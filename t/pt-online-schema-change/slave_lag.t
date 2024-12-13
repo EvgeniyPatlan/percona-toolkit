@@ -354,6 +354,7 @@ $sb->do_as_root("source", q/FLUSH TABLES/);
 
 diag("Setting replica delay to 0 seconds");
 $replica_dbh->do("STOP ${replica_name}");
+$replica_dbh->do("CHANGE ${source_change} TO ${source_name}_DELAY=0");
 $source_dbh->do("RESET ${source_reset}");
 $replica_dbh->do("RESET ${replica_name}");
 $replica_dbh->do("START ${replica_name}");

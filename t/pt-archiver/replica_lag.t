@@ -251,6 +251,7 @@ like(
 # Done.
 # #############################################################################
 $replica1_dbh->do("STOP ${replica_name}");
+$replica1_dbh->do("CHANGE ${source_change} TO ${source_name}_DELAY=0");
 $source_dbh->do("RESET ${source_reset}");
 $replica1_dbh->do("RESET ${replica_name}");
 $replica1_dbh->do("START ${replica_name}");
