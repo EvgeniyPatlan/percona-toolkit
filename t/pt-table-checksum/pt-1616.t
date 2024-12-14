@@ -106,7 +106,7 @@ unlike(
 # #############################################################################
 # Done.
 # #############################################################################
-# Resetting replicas, because this test sporadically fails
+diag("Resetting replicas, because this test sporadically fails");
 $replica1_dbh->do("STOP ${replica_name}");
 $replica2_dbh->do("STOP ${replica_name}");
 $dbh->do("RESET ${source_reset}");
@@ -115,7 +115,9 @@ $replica1_dbh->do("START ${replica_name}");
 $replica2_dbh->do("RESET ${replica_name}");
 $replica2_dbh->do("START ${replica_name}");
 
+diag("Replicas reset, syncing");
 $sb->wait_for_replicas();
+diag("Cleaning up");
 $sb->wipe_clean($dbh);
 ok($sb->ok(), "Sandbox servers") or BAIL_OUT(__FILE__ . " broke the sandbox");
 exit;
