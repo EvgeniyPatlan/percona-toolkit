@@ -12,7 +12,7 @@ use English qw(-no_match_vars);
 use Test::More;
 
 #if ( !$ENV{SLOW_TESTS} ) { 
-#   plan skip_all => "pt-table-checksum/replication_filters.t is one of the top slowest files; set SLOW_TESTS=1 to enable it.";
+#   plan skip_all => "pt-table-checksum/pt-1616.t is one of the top slowest files; set SLOW_TESTS=1 to enable it.";
 #}
 
 use PerconaTest;
@@ -23,6 +23,8 @@ require "$trunk/bin/pt-table-checksum";
 my $dp  = new DSNParser(opts=>$dsn_opts);
 my $sb  = new Sandbox(basedir => '/tmp', DSNParser => $dp);
 my $dbh = $sb->get_dbh_for('source');
+my $replica1_dbh = $sb->get_dbh_for('replica1');
+my $replica2_dbh = $sb->get_dbh_for('replica2');
 
 if ( !$dbh ) {
     plan skip_all => 'Cannot connect to sandbox source';
@@ -104,6 +106,15 @@ unlike(
 # #############################################################################
 # Done.
 # #############################################################################
+# Resetting replicas, because this test sporadically fails
+$replica1_dbh->do("STOP ${replica_name}");
+$replica2_dbh->do("STOP ${replica_name}");
+$dbh->do("RESET ${source_reset}");
+$replica1_dbh->do("RESET ${replica_name}");
+$replica1_dbh->do("START ${replica_name}");
+$replica2_dbh->do("RESET ${replica_name}");
+$replica2_dbh->do("START ${replica_name}");
+
 $sb->wait_for_replicas();
 $sb->wipe_clean($dbh);
 ok($sb->ok(), "Sandbox servers") or BAIL_OUT(__FILE__ . " broke the sandbox");
